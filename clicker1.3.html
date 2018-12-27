@@ -1,0 +1,94 @@
+<html>
+
+<head> 
+
+</head>
+
+<body onload="checkCount(); checkAutoCountAmount(); checkUpgradeCost1(); startAutoCount(); checkButtonValue();"> 
+<p style="text-align:center;"> <a href="index.html">Terug naar hoofdmenu</a> </p>
+<h1 id="clicks">Start clicking!</h1>
+<p id="print1"><p>
+<input type="button" id="button" value="Click here!" onclick="countClicks(); totalcount();">
+<input type="button" id="button1" value="temp" onclick="upgradeNow1(); checkButtonValue(); forfewseconds();">
+<script>
+var countps = 0
+var audio1 = new Audio('audio1.mp3');
+var audio2 = new Audio('audio2.wav');
+function checkCount(){
+    str_count1 = localStorage.getItem("count1");
+    if (str_count1 == null || str_count1 == "null") {
+      count1 = 0;
+    } else {
+      count1 = parseInt(str_count1);
+    }
+}
+function checkAutoCountAmount(){
+    str_autoCountAmount = localStorage.getItem("autoCountAmount");
+    if (str_autoCountAmount == null || str_autoCountAmount == "null") {
+      autoCountAmount = 0;
+    } else {
+      autoCountAmount = parseInt(str_autoCountAmount);
+    }
+}
+function checkUpgradeCost1(){
+    str_upgradeCost1 = localStorage.getItem("upgradeCost1");
+    if (str_upgradeCost1 == null || str_upgradeCost1 == "null") {
+	  upgradeCost1 = 100;
+	} else {
+	  upgradeCost1 = parseInt(str_upgradeCost1);
+	}
+}
+function checkButtonValue(){
+   document.getElementById("button1").value = "Upgrade! (costs " + upgradeCost1.toFixed(2) + "$)"; 
+}
+function startAutoCount(){
+    setInterval(
+	   function(){
+       count1 += autoCountAmount;
+	   document.getElementById('clicks').innerHTML=count1.toFixed(2) + "$";
+	   localStorage.setItem("count1", count1);
+       }, 1000);
+}
+function countClicks(){
+    audio1.play();
+    count1 += 1;
+    document.getElementById('clicks').innerHTML=count1.toFixed(2) + "$";
+    localStorage.setItem("count1", count1);
+}
+function upgradeNow1(){
+    if (count1 >= upgradeCost1){
+	  audio2.play();
+	  count1 -= upgradeCost1
+	  upgradeCost1 *= 1.10
+	  autoCountAmount += 1
+	  document.getElementById("print").innerHTML="";
+	  document.getElementById('clicks').innerHTML=count1.toFixed(2) + "$";
+	  document.getElementById("print").innerHTML="You bought an upgrade, you now get " + autoCountAmount + "$ per second.";
+	  localStorage.setItem("count1", count1);
+	  localStorage.setItem("autoCountAmount", autoCountAmount);
+	  localStorage.setItem("upgradeCost1", upgradeCost1);
+	} else {
+	  document.getElementById("print").innerHTML="You don't have enough money for an upgrade.";
+	}
+}
+function totalcount(){
+countps += 1
+}
+function forfewseconds(){   
+setTimeout(
+   function(){
+   document.getElementById("print").innerHTML="";
+   }, 5000);
+}
+setInterval(
+   function(){
+   tempcount = countps
+   countps -= countps
+   document.getElementById("print1").innerHTML=tempcount + autoCountAmount + "$ per second";
+   }, 1000);
+
+</script>
+<p id="print"><p>
+
+</body>
+</html>
